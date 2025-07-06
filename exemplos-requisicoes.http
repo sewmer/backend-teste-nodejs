@@ -1,0 +1,103 @@
+# Exemplos de Requisições HTTP para testar a API
+# Você pode usar estes exemplos no Postman, Insomnia ou curl
+
+### 1. Health Check
+GET http://localhost:3000/
+Accept: application/json
+
+### 2. Status da API
+GET http://localhost:3000/api/status
+Accept: application/json
+
+### 3. Registrar usuário
+POST http://localhost:3000/api/users/register
+Content-Type: application/json
+
+{
+  "username": "usuario_teste",
+  "email": "teste@example.com",
+  "password": "MinhaSenh@123"
+}
+
+### 4. Login
+POST http://localhost:3000/api/users/login
+Content-Type: application/json
+
+{
+  "username": "usuario_teste",
+  "password": "MinhaSenh@123"
+}
+
+### 5. Listar usuários (REQUER TOKEN)
+# Substitua SEU_TOKEN_AQUI pelo token obtido no login
+GET http://localhost:3000/api/users
+Accept: application/json
+Authorization: Bearer SEU_TOKEN_AQUI
+
+### 6. Buscar usuário por ID (REQUER TOKEN)
+GET http://localhost:3000/api/users/1
+Accept: application/json
+Authorization: Bearer SEU_TOKEN_AQUI
+
+### 7. Atualizar usuário (REQUER TOKEN)
+PUT http://localhost:3000/api/users/1
+Content-Type: application/json
+Authorization: Bearer SEU_TOKEN_AQUI
+
+{
+  "username": "usuario_atualizado",
+  "email": "novo_email@example.com"
+}
+
+### 8. Webhook de teste
+POST http://localhost:3000/api/webhooks/test
+Content-Type: application/json
+
+{
+  "message": "Testando webhook!",
+  "data": {
+    "tipo": "teste",
+    "timestamp": "2025-07-05T10:00:00Z"
+  }
+}
+
+### 9. Webhook de teste (GET)
+GET http://localhost:3000/api/webhooks/test?param=valor
+
+### 10. Webhook genérico
+POST http://localhost:3000/api/webhooks/generic
+Content-Type: application/json
+
+{
+  "evento": "usuario_criado",
+  "dados": {
+    "usuario_id": 123,
+    "nome": "João Silva"
+  }
+}
+
+### 11. Webhook de pagamento
+POST http://localhost:3000/api/webhooks/payment
+Content-Type: application/json
+
+{
+  "event_type": "payment.completed",
+  "data": {
+    "payment_id": "pay_12345",
+    "amount": 150.00,
+    "currency": "BRL",
+    "customer": {
+      "id": "cust_789",
+      "email": "customer@example.com"
+    }
+  }
+}
+
+### 12. Ver logs de webhooks (REQUER TOKEN)
+GET http://localhost:3000/api/webhooks/logs?limit=10&offset=0
+Accept: application/json
+Authorization: Bearer SEU_TOKEN_AQUI
+
+### 13. Deletar usuário (REQUER TOKEN)
+DELETE http://localhost:3000/api/users/1
+Authorization: Bearer SEU_TOKEN_AQUI
