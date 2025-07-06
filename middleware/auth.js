@@ -18,10 +18,23 @@ const authenticateToken = (req, res, next) => {
   });
 };
 
-// Middleware para log de requisições
+// Middleware para log de requisições (versão melhorada)
 const requestLogger = (req, res, next) => {
   const timestamp = new Date().toISOString();
-  console.log(`[${timestamp}] ${req.method} ${req.originalUrl} - IP: ${req.ip}`);
+  const userAgent = req.headers['user-agent'] || 'Unknown';
+  const method = req.method;
+  const url = req.originalUrl;
+  const ip = req.ip || req.connection.remoteAddress;
+  
+  console.log(`[${timestamp}] ${method} ${url} - IP: ${ip} - Agent: ${userAgent.substring(0, 50)}...`);
+  
+  // Adicionar tempo de resposta
+  const startTime = Date.now();
+  res.on('finish', () => {
+    const duration = Date.now() - startTime;
+    console.log(`[${timestamp}] ${method} ${url} - Completed in ${duration}ms - Status: ${res.statusCode}`);
+  });
+  
   next();
 };
 

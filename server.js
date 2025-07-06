@@ -49,7 +49,8 @@ app.get('/', (req, res) => {
     message: 'Backend de teste está funcionando!',
     timestamp: new Date().toISOString(),
     uptime: process.uptime(),
-    environment: process.env.NODE_ENV || 'development'
+    environment: process.env.NODE_ENV || 'development',
+    version: '1.1.0' // Versão atualizada para teste de deploy
   });
 });
 
@@ -59,9 +60,15 @@ app.get('/api/status', (req, res) => {
     status: 'online',
     message: 'API funcionando corretamente',
     timestamp: new Date().toISOString(),
+    version: '1.1.0',
     endpoints: {
       users: '/api/users',
       webhooks: '/api/webhooks'
+    },
+    stats: {
+      uptime: process.uptime(),
+      memory: process.memoryUsage(),
+      pid: process.pid
     }
   });
 });
