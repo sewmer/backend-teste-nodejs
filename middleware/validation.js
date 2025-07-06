@@ -16,8 +16,6 @@ const validateUserRegistration = [
   body('password')
     .isLength({ min: 6 })
     .withMessage('Senha deve ter pelo menos 6 caracteres')
-    .matches(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)/)
-    .withMessage('Senha deve conter pelo menos uma letra minúscula, uma maiúscula e um número')
 ];
 
 const validateUserLogin = [

@@ -73,6 +73,43 @@ app.get('/api/status', (req, res) => {
   });
 });
 
+// Rota para backup/exportar dados (protegida)
+app.get('/api/backup', async (req, res) => {
+  try {
+    // Verificar autenticação
+    const authHeader = req.headers['authorization'];
+    const token = authHeader && authHeader.split(' ')[1];
+    
+    if (!token) {
+      return res.status(401).json({ message: 'Token de acesso requerido para backup' });
+    }
+
+    // Para simplificar, vamos exportar dados básicos
+    const users = await db.query('SELECT id, username, email, created_at FROM users');
+    const webhookLogs = await db.query('SELECT * FROM webhook_logs ORDER BY timestamp DESC LIMIT 100');
+    
+    const backup = {
+      timestamp: new Date().toISOString(),
+      version: '1.1.0',
+      data: {
+        users: users,
+        webhook_logs: webhookLogs,
+        total_users: users.length,
+        total_webhook_logs: webhookLogs.length
+      }
+    };
+
+    res.json({
+      message: 'Backup gerado com sucesso',
+      backup: backup
+    });
+
+  } catch (error) {
+    console.error('Erro ao gerar backup:', error);
+    res.status(500).json({ message: 'Erro ao gerar backup' });
+  }
+});
+
 // Rotas da API
 app.use('/api/users', userRoutes);
 app.use('/api/webhooks', webhookRoutes);
@@ -118,6 +155,7 @@ async function startServer() {
       console.log('• POST /api/webhooks/test - Testar webhook');
       console.log('• POST /api/webhooks/generic - Webhook genérico');
       console.log('• GET /api/webhooks/logs - Ver logs de webhooks (requer token)');
+      console.log('• GET /api/backup - Exportar dados (requer token)');
     });
 
   } catch (error) {

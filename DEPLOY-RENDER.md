@@ -52,7 +52,7 @@ Start Command: npm start
 Na seção "Environment Variables", adicione:
 
 ```
-JWT_SECRET=sua_chave_secreta_jwt_super_segura_para_producao_12345
+JWT_SECRET=sua_chave_secreta_jwt_super_segura_para_producao_2707
 NODE_ENV=production
 ```
 
